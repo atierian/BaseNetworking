@@ -15,3 +15,8 @@ Some highlights:
 Some notes:
 - Experimented with a few different approaches to dependency injection / mocking.
 - This is just an example implementation of an idea, it is not a finished "product"
+
+Needed improvements:
+- Link body type to endpoint 
+- Extract Endpointable out into clearly defined protocols for different HTTP methods
+- Decide on DI / Mocking approach for RequestDispatching

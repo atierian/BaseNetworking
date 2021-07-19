@@ -2,12 +2,14 @@ import Foundation
 
 public struct BaseNetworker: BaseNetworkable {
   
+  /// Handles dispatching network requests
   let requestDispatcher: NetworkRequestDispatcher
   
   init(_ requestDispatcher: NetworkRequestDispatcher = NetworkRequestDispatcher()) {
     self.requestDispatcher = requestDispatcher
   }
   
+  // Documentation provided by NetworkRequestDispatchable protocol
   func get<E: Endpointable>(
     endpoint: E,
     environment: Environment,
@@ -36,6 +38,7 @@ public struct BaseNetworker: BaseNetworkable {
     }
   }
   
+  // Documentation provided by NetworkRequestDispatchable protocol
   func post<E: Endpointable, U: Codable>(
     endpoint: E,
     body: U,
@@ -69,6 +72,7 @@ public struct BaseNetworker: BaseNetworkable {
     }
   }
   
+  // Documentation provided by NetworkRequestDispatchable protocol
   func put<E: Endpointable, U: Codable>(
     endpoint: E,
     environment: Environment,
@@ -102,6 +106,7 @@ public struct BaseNetworker: BaseNetworkable {
     }
   }
   
+  // Documentation provided by NetworkRequestDispatchable protocol
   func delete<E: Endpointable>(
     endpoint: E,
     environment: Environment,
@@ -126,6 +131,13 @@ public struct BaseNetworker: BaseNetworkable {
     requestDispatcher.delete(request: request, logger: logger, completion: completion)
   }
   
+  
+  /// Complete request with decoding data or error from `Result`
+  /// - Parameters:
+  ///   - result: Result generated from request response
+  ///   - endpoint: Endpoint received during request
+  ///   - logger: `Logger` instance received in request
+  ///   - completion: Completion handler received in request
   private func handleResponseCompletion<E: Endpointable>(
     _ result: Result<Data, NetworkError>,
     endpoint: E,
@@ -134,7 +146,12 @@ public struct BaseNetworker: BaseNetworkable {
   ) {
     completion(Deserializing.baseNetworkResult.deserialize((result, endpoint.response, logger)))
   }
-    
+  
+  /// Encode body object
+  /// - Parameters:
+  ///   - body: Encodable conforming object to be including in request
+  ///   - logger: `Logger` instance received in request
+  /// - Returns: `Data` if encoding succeeded. `nil` if not
   private func encode<T: Encodable>(body: T, logger: Logger) -> Data? {
     Serializing.json.serialize((body, logger, JSONEncoder()))
   }
